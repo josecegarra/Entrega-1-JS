@@ -8,7 +8,7 @@ let historialFacturas = [];
 
 // Función principal que gestiona el menú de opciones
 function gestionTienda() {
-    let nombreUsuario = prompt("Bienvenido/a a la tienda. Por favor, ingrese su nombre:");
+    let nombreUsuario = prompt("Bienvenido/a a la tienda. Por favor, ingrese su Usuario:");
 
     while (true) {
         let opcion = prompt(`Hola ${nombreUsuario}. Elija una opción:\n1. Ingresar factura\n2. Historial de facturas\n3. Ver stock\n4. Salir`);
