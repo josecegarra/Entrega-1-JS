@@ -1,44 +1,54 @@
-// Variables globales para el stock inicial
 let stockTazas = 50;
 let stockCuadernos = 100;
 let stockLapices = 200;
 
-// Array para almacenar el historial de facturas
 let historialFacturas = [];
 
-// Función principal que gestiona el menú de opciones
-function gestionTienda() {
-    let nombreUsuario = prompt("Bienvenido/a a la tienda. Por favor, ingrese su Usuario:");
-
-    while (true) {
-        let opcion = prompt(`Hola ${nombreUsuario}. Elija una opción:\n1. Ingresar factura\n2. Historial de facturas\n3. Ver stock\n4. Salir`);
-
-        switch (opcion) {
-            case '1':
-                ingresarFactura();
-                break;
-            case '2':
-                mostrarHistorialFacturas();
-                break;
-            case '3':
-                mostrarStock();
-                break;
-            case '4':
-                alert("Gracias por utilizar el sistema de control de stock. ¡Hasta luego!");
-                return;
-            default:
-                alert("Opción inválida. Por favor, elija una opción válida.");
-        }
+function iniciarTienda() {
+    let nombreUsuario = document.getElementById('usuario').value;
+    if (nombreUsuario) {
+        mostrarMenu(nombreUsuario);
+    } else {
+        alert("Por favor, ingrese un usuario.");
     }
 }
 
-// Función para ingresar una factura
-function ingresarFactura() {
-    let nombreCliente = prompt("Ingrese el nombre del cliente:");
-    let producto = prompt("Ingrese el producto comprado (taza, cuaderno o lápiz):").toLowerCase();
-    let cantidad = parseInt(prompt("Ingrese la cantidad comprada:"));
+function mostrarMenu(nombreUsuario) {
+    let contenido = `
+        <h2>Hola ${nombreUsuario}</h2>
+        <button onclick="ingresarFactura()">Ingresar factura</button>
+        <button onclick="mostrarHistorialFacturas()">Historial de facturas</button>
+        <button onclick="mostrarStock()">Ver stock</button>
+        <button onclick="salir()">Salir</button>
+    `;
+    document.getElementById('contenido').innerHTML = contenido;
+}
 
-    // Validación de stock y actualización
+function ingresarFactura() {
+    let contenido = `
+        <h2>Ingresar Factura</h2>
+        <label for="nombreCliente">Nombre del Cliente:</label>
+        <input type="text" id="nombreCliente">
+        <label for="producto">Producto (taza, cuaderno o lápiz):</label>
+        <input type="text" id="producto">
+        <label for="cantidad">Cantidad:</label>
+        <input type="number" id="cantidad">
+        <button onclick="procesarFactura()">Procesar Factura</button>
+        <button onclick="volverMenu()">Volver</button>
+    `;
+    document.getElementById('contenido').innerHTML = contenido;
+}
+
+function procesarFactura() {
+    let nombreCliente = document.getElementById('nombreCliente').value;
+    let producto = document.getElementById('producto').value.toLowerCase();
+    let cantidad = parseInt(document.getElementById('cantidad').value);
+
+    if (!nombreCliente || !producto || isNaN(cantidad)) {
+        alert("Por favor, complete todos los campos.");
+        return;
+    }
+
     if (producto === 'taza') {
         if (cantidad > stockTazas) {
             alert("No hay suficientes tazas en stock.");
@@ -68,7 +78,6 @@ function ingresarFactura() {
     }
 }
 
-// Función para registrar la factura en el historial
 function registrarFactura(cliente, producto, cantidad) {
     let factura = {
         cliente: cliente,
@@ -79,25 +88,39 @@ function registrarFactura(cliente, producto, cantidad) {
     historialFacturas.push(factura);
 }
 
-// Función para mostrar el historial de facturas
 function mostrarHistorialFacturas() {
+    let contenido = `<h2>Historial de Facturas</h2>`;
     if (historialFacturas.length === 0) {
-        alert("No hay facturas ingresadas aún.");
+        contenido += `<p>No hay facturas ingresadas aún.</p>`;
     } else {
-        console.log("Historial de facturas:");
+        contenido += `<ul>`;
         historialFacturas.forEach(factura => {
-            console.log(`${factura.cliente} compró ${factura.cantidad} ${factura.producto}(s) el ${factura.fecha}.`);
+            contenido += `<li>${factura.cliente} compró ${factura.cantidad} ${factura.producto}(s) el ${factura.fecha}.</li>`;
         });
+        contenido += `</ul>`;
     }
+    contenido += `<button onclick="volverMenu()">Volver</button>`;
+    document.getElementById('contenido').innerHTML = contenido;
 }
 
-// Función para mostrar el stock actual
 function mostrarStock() {
-    console.log("Stock actual:");
-    console.log(`Tazas: ${stockTazas}`);
-    console.log(`Cuadernos: ${stockCuadernos}`);
-    console.log(`Lápices: ${stockLapices}`);
+    let contenido = `
+        <h2>Stock Actual</h2>
+        <p>Tazas: ${stockTazas}</p>
+        <p>Cuadernos: ${stockCuadernos}</p>
+        <p>Lápices: ${stockLapices}</p>
+        <button onclick="volverMenu()">Volver</button>
+    `;
+    document.getElementById('contenido').innerHTML = contenido;
 }
 
-// Iniciar la gestión de la tienda
-gestionTienda();
+function salir() {
+    alert("Gracias por utilizar el sistema de control de stock. ¡Hasta luego!");
+    document.getElementById('contenido').innerHTML = "";
+    document.getElementById('menu').style.display = "block";
+}
+
+function volverMenu() {
+    let nombreUsuario = document.getElementById('usuario').value;
+    mostrarMenu(nombreUsuario);
+}
