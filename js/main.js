@@ -1,6 +1,11 @@
-let stockTazas = 50;
-let stockCuadernos = 100;
-let stockLapices = 200;
+let productos = [
+    { nombre: 'taza', stock: 50 },
+    { nombre: 'cuaderno', stock: 100 },
+    { nombre: 'lápiz', stock: 200 },
+    { nombre: 'mate', stock: 10 },
+    { nombre: 'termo', stock: 10 },
+    { nombre: 'bombilla', stock: 10 }
+];
 
 let historialFacturas = [];
 
@@ -29,7 +34,7 @@ function ingresarFactura() {
         <h2>Ingresar Factura</h2>
         <label for="nombreCliente">Nombre del Cliente:</label>
         <input type="text" id="nombreCliente">
-        <label for="producto">Producto (taza, cuaderno o lápiz):</label>
+        <label for="producto">Producto (taza, cuaderno, lápiz, mate, termo o bombilla):</label>
         <input type="text" id="producto">
         <label for="cantidad">Cantidad:</label>
         <input type="number" id="cantidad">
@@ -49,29 +54,15 @@ function procesarFactura() {
         return;
     }
 
-    if (producto === 'taza') {
-        if (cantidad > stockTazas) {
-            alert("No hay suficientes tazas en stock.");
+    let productoEncontrado = productos.find(p => p.nombre === producto);
+
+    if (productoEncontrado) {
+        if (cantidad > productoEncontrado.stock) {
+            alert(`No hay suficientes ${producto}s en stock.`);
         } else {
-            stockTazas -= cantidad;
+            productoEncontrado.stock -= cantidad;
             registrarFactura(nombreCliente, producto, cantidad);
-            alert(`Factura ingresada correctamente. Stock actual de tazas: ${stockTazas}`);
-        }
-    } else if (producto === 'cuaderno') {
-        if (cantidad > stockCuadernos) {
-            alert("No hay suficientes cuadernos en stock.");
-        } else {
-            stockCuadernos -= cantidad;
-            registrarFactura(nombreCliente, producto, cantidad);
-            alert(`Factura ingresada correctamente. Stock actual de cuadernos: ${stockCuadernos}`);
-        }
-    } else if (producto === 'lápiz' || producto === 'lapiz') {
-        if (cantidad > stockLapices) {
-            alert("No hay suficientes lápices en stock.");
-        } else {
-            stockLapices -= cantidad;
-            registrarFactura(nombreCliente, producto, cantidad);
-            alert(`Factura ingresada correctamente. Stock actual de lápices: ${stockLapices}`);
+            alert(`Factura ingresada correctamente. Stock actual de ${producto}s: ${productoEncontrado.stock}`);
         }
     } else {
         alert("Producto ingresado no válido.");
@@ -106,11 +97,11 @@ function mostrarHistorialFacturas() {
 function mostrarStock() {
     let contenido = `
         <h2>Stock Actual</h2>
-        <p>Tazas: ${stockTazas}</p>
-        <p>Cuadernos: ${stockCuadernos}</p>
-        <p>Lápices: ${stockLapices}</p>
-        <button onclick="volverMenu()">Volver</button>
     `;
+    productos.forEach(producto => {
+        contenido += `<p>${producto.nombre.charAt(0).toUpperCase() + producto.nombre.slice(1)}s: ${producto.stock}</p>`;
+    });
+    contenido += `<button onclick="volverMenu()">Volver</button>`;
     document.getElementById('contenido').innerHTML = contenido;
 }
 
