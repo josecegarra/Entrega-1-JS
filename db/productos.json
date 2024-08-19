@@ -1,0 +1,10 @@
+[
+    { "nombre": "taza", "stock": 50 },
+    { "nombre": "cuaderno", "stock": 100 },
+    { "nombre": "lápiz", "stock": 200 },
+    { "nombre": "mate", "stock": 10 },
+    { "nombre": "termo", "stock": 10 },
+    { "nombre": "bombilla", "stock": 10 }
+]
+
+
